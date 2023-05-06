@@ -413,7 +413,7 @@ class KotMedGrafomaElementarnihFunkcij(Problem):
             "minute": sympy.latex(minute),
         }
 
-    class EkstremiFunkcije(Problem):
+class EkstremiFunkcije(Problem):
     """
     Naloga za izračun ekstremov funkcije.
     """
