@@ -412,3 +412,30 @@ class KotMedGrafomaElementarnihFunkcij(Problem):
             "stopinje": sympy.latex(stopinje),
             "minute": sympy.latex(minute),
         }
+
+    class EkstremiFunkcije(Problem):
+    """
+    Naloga za izračun ekstremov funkcije.
+    """
+
+    default_instruction = r"Izračunaj ekstreme funkcije $f(x)=@funkcija$."
+    default_solution = r"" # TODO: izpisovanje tabele
+
+    class Meta:
+        verbose_name = "Odvodi / računanje ekstremov funkcij"
+
+    def generate(self):
+        polinom = generiraj_polinom()
+        polinom = sympy.expand(polinom)
+
+        x = sympy.symbols('x', real=True)
+        derivate = sympy.diff(polinom, x)
+        ekstremi_x = sympy.solveset(derivate, x)
+        exstremi_y = [sympy.simplify(polinom.subs(x, ekstrem_x)) for ekstrem_x in ekstremi_x]
+
+        ekstremi = tuple(zip(ekstremi_x, exstremi_y))
+        
+        return {
+            "funkcija": sympy.latex(polinom),
+            "ekstremi": sympy.latex(ekstremi)
+        }
