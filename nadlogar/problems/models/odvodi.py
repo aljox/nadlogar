@@ -39,6 +39,8 @@ def generiraj_polinom(min_stopnja=2, max_stopnja=3):
     generiraj_polinom(max_stopnja=5)
     -2*x**4 + x**3 + 2*x**2 + 2*x + 3
     """
+    random.seed()
+
     x = sympy.symbols("x")
     stopnja = random.randint(min_stopnja, max_stopnja)
     polinom = sympy.Poly(
@@ -413,26 +415,25 @@ class KotMedGrafomaElementarnihFunkcij(Problem):
             "minute": sympy.latex(minute),
         }
 
-class EkstremiFunkcije(Problem):
+class EkstremiPolinoma(Problem):
     """
-    Naloga za izračun ekstremov funkcije.
+    Naloga za izračun ekstremov polinoma.
     """
 
-    default_instruction = r"Izračunaj ekstreme funkcije $f(x)=@funkcija$."
-    default_solution = r"" # TODO: izpisovanje tabele
+    default_instruction = r"Izračunaj ekstreme polinoma $f(x)=@funkcija$. Ekstreme zapiši v točkah!"
+    default_solution = r"$@ekstremi$" 
 
     class Meta:
-        verbose_name = "Odvodi / računanje ekstremov funkcij"
+        verbose_name = "Odvodi / računanje ekstremov polinoma"
 
     def generate(self):
+        x = sympy.symbols("x")
+
         polinom = generiraj_polinom()
-        polinom = sympy.expand(polinom)
+        derivate = polinom.diff()
 
-        x = sympy.symbols('x', real=True)
-        derivate = sympy.diff(polinom, x)
-        ekstremi_x = sympy.solveset(derivate, x)
+        ekstremi_x = sympy.solveset(derivate, domain=sympy.S.Reals)
         exstremi_y = [sympy.simplify(polinom.subs(x, ekstrem_x)) for ekstrem_x in ekstremi_x]
-
         ekstremi = tuple(zip(ekstremi_x, exstremi_y))
         
         return {
